@@ -13,3 +13,6 @@ that so I've setup a new repo at github.
 
 The plugin has been updated to use the new day9.tv website as it's archive
 source, and to use the youtube plugin as the video player.
+
+I have added "search" to the page but I haven't written any code for that part
+yet.
