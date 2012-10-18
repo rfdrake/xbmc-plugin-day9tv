@@ -92,17 +92,14 @@ class Day9tv:
     def showGames(self, params = {}):
         get = params.get
         link = self.getRequest(get("url"))
-        # look at cinemassecre plugin for inspiration on how to do this nice
-        # if we can parse it
-        # lack of markup is killing me.. nothing can safely parse this
-        #tree = BeautifulSoup(link)
-        #picture = tree.find('div', id='content').find('img')
-        #description = tree.find('div', id='content').div.find('p')
-        videos = re.findall('<iframe .*? src="http://www.youtube.com/embed/(.*?)">', link)
+        tree = BeautifulSoup(link)
+        # ideally we grab the pictures and comment text, airdate, etc to
+        # include them in the display
         i=0
-        for v in videos:
+        for video in tree.findAll('iframe'):
+            v=re.match('http://www.youtube.com/embed/(.*)', video.get('src'))
             i=i+1
-            self.addVideo(get("title")+' Part '+str(i), youtubeid=v)
+            self.addVideo(get("title")+' Part '+str(i), youtubeid=v.group(1))
 
     def showVideo(self, params = {}):
         get = params.get
