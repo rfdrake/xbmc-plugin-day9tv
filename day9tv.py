@@ -26,25 +26,25 @@ class Day9tv:
 
     # display the root menu
     def root(self):
-        self.addCategory(self.__language__(31000), 'http://day9.tv/archives', 'showTitles', 1)
-        self.addCategory('Search', '', 'showSearch', 1)
+        self.addCategory(self.__language__(31000), 'http://day9.tv/archives', 'showTitles')
+        self.addCategory('Search', '', 'showSearch')
         # these need to be dynamic
-        self.addCategory('Funday Monday', 'http://day9.tv/archives?q=%22Funday%20Monday%22', 'showTitles', 1)
-        self.addCategory('Newbie Tuesday', 'http://day9.tv/archives?q=%22Newbie%20Tuesday%22', 'showTitles', 1)
-        self.addCategory('MetaDating', 'http://day9.tv/archives?q=MetaDating', 'showTitles', 1)
-        self.addCategory('Red Bull LAN', 'http://day9.tv/archives?q=%22Red%20Bull%20LAN%22', 'showTitles', 1)
-        self.addCategory('Amnesia: The Dark Descent', 'http://day9.tv/archives?q=%22Amnesia%3A%20The%20Dark%20Descent%22', 'showTitles', 1)
-        self.addCategory('IEM GamesCom', 'http://day9.tv/archives?q=%22IEM%20GamesCom%22', 'showTitles', 1)
-        self.addCategory('Protoss', 'http://day9.tv/archives?q=protoss', 'showTitles', 1)
-        self.addCategory('Zerg', 'http://day9.tv/archives?q=zerg', 'showTitles', 1)
-        self.addCategory('Terran', 'http://day9.tv/archives?q=terran', 'showTitles', 1)
+        self.addCategory('Funday Monday', 'http://day9.tv/archives?q=%22Funday%20Monday%22', 'showTitles')
+        self.addCategory('Newbie Tuesday', 'http://day9.tv/archives?q=%22Newbie%20Tuesday%22', 'showTitles')
+        self.addCategory('MetaDating', 'http://day9.tv/archives?q=MetaDating', 'showTitles')
+        self.addCategory('Red Bull LAN', 'http://day9.tv/archives?q=%22Red%20Bull%20LAN%22', 'showTitles')
+        self.addCategory('Amnesia: The Dark Descent', 'http://day9.tv/archives?q=%22Amnesia%3A%20The%20Dark%20Descent%22', 'showTitles')
+        self.addCategory('IEM GamesCom', 'http://day9.tv/archives?q=%22IEM%20GamesCom%22', 'showTitles')
+        self.addCategory('Protoss', 'http://day9.tv/archives?q=protoss', 'showTitles')
+        self.addCategory('Zerg', 'http://day9.tv/archives?q=zerg', 'showTitles')
+        self.addCategory('Terran', 'http://day9.tv/archives?q=terran', 'showTitles')
 
 
     # ------------------------------------- Add functions ------------------------------------- #
 
 
-    def addCategory(self, title, url, action, page = 1):
-        url=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&title="+title+"&action="+urllib.quote_plus(action)+"&page="+str(page)
+    def addCategory(self, title, url, action):
+        url=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&title="+title+"&action="+urllib.quote_plus(action)
         listitem=xbmcgui.ListItem(title,iconImage="DefaultFolder.png", thumbnailImage="DefaultFolder.png")
         listitem.setInfo( type="Video", infoLabels={ "Title": title } )
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=True)
@@ -79,15 +79,12 @@ class Day9tv:
         airdate = re.compile('<h3><a href=".*?">.*?</a></h3>.*?<time datetime="(.*)"').findall(str(results))
 
         for i in range(len(title)):
-            self.addCategory(title[i], 'http://day9.tv/'+url[i], 'showGames', '')
+            self.addCategory(title[i], 'http://day9.tv/'+url[i], 'showGames')
 
-        page = int(get("page"))+1
-        # probably a better way to do this
-        mark = '?'
-        if '?' in get("url"): 
-            mark = '&'
-        url = get("url")+mark+'page='+str(page)
-        self.addCategory('more episodes...', url, 'showTitles', page)
+        nextpage = tree.find('li', { "class" : "next" }).find('a').get('href')
+        if nextpage: 
+            url = 'http://day9.tv/archives/'+nextpage
+            self.addCategory('more episodes...', url, 'showTitles')
 
     def showGames(self, params = {}):
         get = params.get
