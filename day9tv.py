@@ -67,9 +67,16 @@ class Day9tv:
     def showTitles(self, params = {}):
         get = params.get
         link = self.getRequest(get("url"))
-        title = re.compile('<h3><a href=".*?">(.*)</a></h3>').findall(link)
-        url = re.compile('<a href="(/d/Day9/.*?)"').findall(link)
-        airdate = re.compile('<h3><a href=".*?">.*?</a></h3>.*?<time datetime="(.*)"').findall(link)
+        tree = BeautifulSoup(link)
+        # narrow down the search to get rid of upcoming shows
+        # I'd like to add them just to inform people of what/when things are
+        # happening but there isn't good markup to isolate them
+        results=tree.find('ul', { "id" : "results" })
+        # need to figure out how to do this as one regex.  Also not done
+        # figuring out soup yet so these are still re on general HTML.
+        title = re.compile('<h3><a href=".*?">(.*)</a></h3>').findall(str(results))
+        url = re.compile('<a href="(/d/Day9/.*?)"').findall(str(results))
+        airdate = re.compile('<h3><a href=".*?">.*?</a></h3>.*?<time datetime="(.*)"').findall(str(results))
 
         for i in range(len(title)):
             self.addCategory(title[i], 'http://day9.tv/'+url[i], 'showGames', '')
@@ -91,7 +98,7 @@ class Day9tv:
         i=0
         for v in videos:
             i=i+1
-            self.addVideo(get("title")+' Part '+str(i), youtubeid=v) 
+            self.addVideo(get("title")+' Part '+str(i), youtubeid=v)
 
     def showVideo(self, params = {}):
         get = params.get
@@ -110,7 +117,7 @@ class Day9tv:
 
     # ------------------------------------- Data functions ------------------------------------- #
 
-    def getParams(self, paramList):    
+    def getParams(self, paramList):
         splitParams = paramList[paramList.find('?')+1:].split('&')
         paramsFinal = {}
         for value in splitParams:
