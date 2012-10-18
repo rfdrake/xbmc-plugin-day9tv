@@ -75,7 +75,7 @@ class Day9tv:
             self.addCategory(title[i], 'http://day9.tv/'+url[i], 'showGames', '')
 
         page = int(get("page"))+1
-        url = 'http://day9.tv/archives/?page='+str(page)
+        url = get("url")+'?page='+str(page)
         self.addCategory('more episodes...', url, 'showTitles', page)
 
     def showGames(self, params = {}):
