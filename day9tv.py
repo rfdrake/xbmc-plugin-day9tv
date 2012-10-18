@@ -81,10 +81,13 @@ class Day9tv:
         for i in range(len(title)):
             self.addCategory(title[i], 'http://day9.tv/'+url[i], 'showGames')
 
-        nextpage = tree.find('li', { "class" : "next" }).find('a').get('href')
-        if nextpage: 
-            url = 'http://day9.tv/archives/'+nextpage
-            self.addCategory('more episodes...', url, 'showTitles')
+        try: 
+            nextpage = tree.find('li', { "class" : "next" }).find('a').get('href')
+            if nextpage: 
+                url = 'http://day9.tv/archives/'+nextpage
+                self.addCategory('more episodes...', url, 'showTitles')
+        except:
+            print "No more pages..."
 
     def showGames(self, params = {}):
         get = params.get
