@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <!-- Category / General strings -->
+    <!-- Settings strings -->
     <string id="30001">General</string>	
 	<string id="30100">Max video quality</string>
     <string id="30110">240p</string>
     <string id="30115">360p</string>
     <string id="30120">480p</string>
 	<string id="30125">HD 720p</string>
+    <string id="30200">Day[9].tv Username</string>
+    <string id="30300">Day[9].tv Password</string>
 	
     <!-- Plugin / Root menu strings -->
     <string id="31000">recent episodes</string>
     <string id="31001">more episodes...</string>
+    <string id="31002">Search</string>	
+
+    <!-- Search Menu -->
+    <string id="32000">New Search</string>	
 </strings>

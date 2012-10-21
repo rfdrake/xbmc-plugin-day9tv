@@ -27,7 +27,7 @@ class Day9tv:
     # display the root menu
     def root(self):
         self.addCategory(self.__language__(31000), 'http://day9.tv/archives', 'showTitles')
-        self.addCategory('Search', '', 'showSearch')
+        self.addCategory(self.__language__(31002), '', 'showSearch')
         # these need to be dynamic
         self.addCategory('Funday Monday', 'http://day9.tv/archives?q=%22Funday%20Monday%22', 'showTitles')
         self.addCategory('Newbie Tuesday', 'http://day9.tv/archives?q=%22Newbie%20Tuesday%22', 'showTitles')
@@ -60,9 +60,11 @@ class Day9tv:
 
     def showSearch(self, params = {}):
         get = params.get
-        self.addCategory('New Search', 'url', 'nothing', '')
-        #for entry in saved_searches:
-
+        self.addCategory(self.__language__(32000), 'url', 'nothing')
+        searches = self.getSearch() 
+        for search in searches:
+            url='http://day9.tv/archives?q='+search
+            self.addCategory(urllib.unquote_plus(search), url, 'showTitles')
 
     def showTitles(self, params = {}):
         get = params.get
@@ -117,6 +119,27 @@ class Day9tv:
         return False
 
     # ------------------------------------- Data functions ------------------------------------- #
+
+
+    # need to work out how editing is going to work for this.  Also don't know
+    # if it matters but I'm storing searches quoted where other people stored
+    # them unquoted.  I feel like this way is safer.
+    def storeSearchList(self, searches):
+        self.__settings__.setSetting("saved_searches", repr(searches))
+
+    def storeSearch(self, search):
+        searches = self.getSearch()
+        searchCount = int(searches)
+        searches = urllib.quote_plus(search) + searches[:searchCount] 
+        self.storeSearchList(searches)
+
+    def getSearch(self):
+        try:
+            searches = eval(self.__settings__.getSetting("saved_searches"))
+        except:
+            searches = []
+        return searches
+
 
     def getParams(self, paramList):
         splitParams = paramList[paramList.find('?')+1:].split('&')

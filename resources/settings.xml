@@ -3,5 +3,16 @@
 	<!-- General -->
 	<category label="30001">
 		<setting id="hd_videos" type="enum" label="30100" lvalues="30110|30115|30120|30125" default="3" />
+<!--
+    Not needed for any features currently.  
+		<setting id="d9tvusername" type="text" label="30200" default="" />
+		<setting id="d9tvpassword" type="text" label="30300" option="hidden" enable="!eq(-1,)" default="" />
+ -->
+
+    <!-- Show/hide various things 
+        // Funday Monday
+        // Newbie Tuesday
+        // etc..
+    -->
 	</category>
 </settings>
