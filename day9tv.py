@@ -1,8 +1,9 @@
 import urllib, urllib2, re, sys, os
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin
 
-from BeautifulSoup import BeautifulStoneSoup
+import CommonFunctions
 from BeautifulSoup import BeautifulSoup
+
 pluginhandle=int(sys.argv[1])
 
 class Day9tv:
@@ -10,13 +11,17 @@ class Day9tv:
     USERAGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8"
     __settings__ = xbmcaddon.Addon(id='plugin.video.day9tv')
     __language__ = __settings__.getLocalizedString
+    common = CommonFunctions
 
+    # this should probably move into default.py or it's own actions.py and not be so iffy
     def action(self, params):
         get = params.get
         if (get("action") == "showTitles"):
             self.showTitles(params)
         if (get("action") == "showGames"):
             self.showGames(params)
+        if (get("action") == "newSearchDialog"):
+            self.newSearchDialog(params)
         if (get("action") == "showSearch"):
             self.showSearch(params)
         if (get("action") == "showVideo"):
@@ -58,13 +63,23 @@ class Day9tv:
 
     # ------------------------------------- Show functions ------------------------------------- #
 
+    def newSearchDialog(self, params = {}):
+        search = self.common.getUserInput(self.__language__(32000))
+        search=urllib.quote_plus(search)
+        dialog = xbmcgui.Dialog()
+        save = dialog.yesno(self.__language__(32010), self.__language__(32015) % search)
+        if save:
+            self.storeSearch(search)
+        params['url']='http://day9.tv/archives?q='+search
+        self.showTitles(params=params)
+
     def showSearch(self, params = {}):
         get = params.get
-        self.addCategory(self.__language__(32000), 'url', 'nothing')
+        self.addCategory(self.__language__(32000), 'url', 'newSearchDialog')
         searches = self.getSearch() 
         for search in searches:
             url='http://day9.tv/archives?q='+search
-            self.addCategory(urllib.unquote_plus(search), url, 'showTitles')
+            self.addCategory(search, url, 'showTitles')
 
     def showTitles(self, params = {}):
         get = params.get

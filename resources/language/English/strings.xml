@@ -17,4 +17,6 @@
 
     <!-- Search Menu -->
     <string id="32000">New Search</string>	
+    <string id="32010">Save This Search?</string>	
+    <string id="32015">Do you want to save the search term (%s) as a favorite?</string>	
 </strings>
