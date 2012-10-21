@@ -3,9 +3,12 @@
     <!-- Category / General strings -->
     <string id="30001">General</string>	
 	<string id="30100">Max video quality</string>
-	<string id="30110">SD</string>
-	<string id="30120">HD 720p</string>
+    <string id="30110">240p</string>
+    <string id="30115">360p</string>
+    <string id="30120">480p</string>
+	<string id="30125">HD 720p</string>
 	
     <!-- Plugin / Root menu strings -->
     <string id="31000">recent episodes</string>
+    <string id="31001">more episodes...</string>
 </strings>

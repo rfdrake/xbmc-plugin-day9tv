@@ -2,6 +2,6 @@
 <settings>
 	<!-- General -->
 	<category label="30001">
-		<setting id="hd_videos" type="enum" label="30100" lvalues="30110|30120" default="1" />
+		<setting id="hd_videos" type="enum" label="30100" lvalues="30110|30115|30120|30125" default="3" />
 	</category>
 </settings>
