@@ -69,27 +69,30 @@ class Day9tv:
     def showTitles(self, params = {}):
         get = params.get
         link = self.getRequest(get("url"))
-        tree = BeautifulSoup(link)
+        # the convert is to get rid of things like &#39;  Fixes unfiled bug
+        # with dailies 484, 393, 389, 388.
+        tree = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         # narrow down the search to get rid of upcoming shows
         # I'd like to add them just to inform people of what/when things are
-        # happening but there isn't good markup to isolate them
+        # happening but there isn't good markup to isolate them.  I guess I
+        # could excise the existing shows and say whatever is left is
+        # upcoming...
         results=tree.find('ul', { "id" : "results" })
-        # need to figure out how to do this as one regex.  Also not done
-        # figuring out soup yet so these are still re on general HTML.
-        title = re.compile('<h3><a href=".*?">(.*)</a></h3>').findall(str(results))
-        url = re.compile('<a href="(/d/Day9/.*?)"').findall(str(results))
-        airdate = re.compile('<h3><a href=".*?">.*?</a></h3>.*?<time datetime="(.*)"').findall(str(results))
+        # should figure out how to do this with soup.. or not
+        titles = re.compile('<h3><a href="(/d/Day9.*?)">(.*?)</a></h3>')
 
-        for i in range(len(title)):
-            self.addCategory(title[i], 'http://day9.tv/'+url[i], 'showGames')
+        for m in titles.finditer(str(results)):
+            title = m.group(2)
+            url = m.group(1)
+            self.addCategory(title, 'http://day9.tv/'+url, 'showGames')
 
         try: 
             nextpage = tree.find('li', { "class" : "next" }).find('a').get('href')
             if nextpage: 
                 url = 'http://day9.tv/archives/'+nextpage
-                self.addCategory('more episodes...', url, 'showTitles')
+                self.addCategory(self.__language__(31001), url, 'showTitles')
         except:
-            print "No more pages..."
+            return
 
     def showGames(self, params = {}):
         get = params.get
