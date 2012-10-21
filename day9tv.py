@@ -151,10 +151,18 @@ class Day9tv:
         searches = urllib.quote_plus(search) + searches[:searchCount] 
         self.storeSearchList(searches)
 
-    def getSearch(self):
+    def deleteSearch(self, search):
+        searches = self.getSearch()
+        for count, s in enumerate(searches):
+            if (search == s):
+            del (searches[count])
+            break
+        return searches
+ 
+    def getSearch(self, search):
         try:
             searches = eval(self.__settings__.getSetting("saved_searches"))
-        except:
+       except:
             searches = []
         return searches
 
