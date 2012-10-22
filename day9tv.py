@@ -20,6 +20,8 @@ class Day9tv:
             self.showTitles(params)
         if (get("action") == "showGames"):
             self.showGames(params)
+        if (get("action") == "removeSearch"):
+            self.removeSearch(params)
         if (get("action") == "newSearchDialog"):
             self.newSearchDialog(params)
         if (get("action") == "showSearch"):
@@ -48,10 +50,12 @@ class Day9tv:
     # ------------------------------------- Add functions ------------------------------------- #
 
 
-    def addCategory(self, title, url, action):
+    def addCategory(self, title, url, action, menu=None):
         url=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&title="+title+"&action="+urllib.quote_plus(action)
         listitem=xbmcgui.ListItem(title,iconImage="DefaultFolder.png", thumbnailImage="DefaultFolder.png")
         listitem.setInfo( type="Video", infoLabels={ "Title": title } )
+        if menu:
+            listitem.addContextMenuItems(menu, replaceItems=True)
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=True)
 
     def addVideo(self,title,youtubeid,description='',picture=''):
@@ -66,10 +70,9 @@ class Day9tv:
     def newSearchDialog(self, params = {}):
         search = self.common.getUserInput(self.__language__(32000))
         search=urllib.quote_plus(search)
-        dialog = xbmcgui.Dialog()
-        save = dialog.yesno(self.__language__(32010), self.__language__(32015) % search)
+        save = xbmcgui.Dialog().yesno(self.__language__(32010), self.__language__(32015) % search)
         if save:
-            self.storeSearch(search)
+            self.saveSearch(search)
         params['url']='http://day9.tv/archives?q='+search
         self.showTitles(params=params)
 
@@ -78,8 +81,17 @@ class Day9tv:
         self.addCategory(self.__language__(32000), 'url', 'newSearchDialog')
         searches = self.getSearch() 
         for search in searches:
+            cm = []
+            cm.append((self.__language__(32500) % search, 'XBMC.RunPlugin(%s?action=removeSearch&search=%s)' % (sys.argv[0], search)))
             url='http://day9.tv/archives?q='+search
-            self.addCategory(search, url, 'showTitles')
+            self.addCategory(search, url, 'showTitles', menu=cm)
+
+    def removeSearch(self, params = {}):
+        get = params.get
+        search = get("search")
+        delete = xbmcgui.Dialog().yesno(self.__language__(32598), self.__language__(32599) % search)
+        if delete:
+            self.deleteSearch(search)
 
     def showTitles(self, params = {}):
         get = params.get
@@ -142,27 +154,27 @@ class Day9tv:
     # need to work out how editing is going to work for this.  Also don't know
     # if it matters but I'm storing searches quoted where other people stored
     # them unquoted.  I feel like this way is safer.
-    def storeSearchList(self, searches):
+    def saveSearchList(self, searches):
         self.__settings__.setSetting("saved_searches", repr(searches))
 
-    def storeSearch(self, search):
+    def saveSearch(self, search):
         searches = self.getSearch()
-        searchCount = int(searches)
-        searches = urllib.quote_plus(search) + searches[:searchCount] 
-        self.storeSearchList(searches)
+        searches.append(urllib.quote_plus(search))
+        self.saveSearchList(searches)
 
     def deleteSearch(self, search):
         searches = self.getSearch()
         for count, s in enumerate(searches):
             if (search == s):
-            del (searches[count])
-            break
-        return searches
+                del (searches[count])
+                self.saveSearchList(searches)
+                break
+        xbmc.executebuiltin("Container.Refresh")
  
-    def getSearch(self, search):
+    def getSearch(self):
         try:
             searches = eval(self.__settings__.getSetting("saved_searches"))
-       except:
+        except:
             searches = []
         return searches
 
