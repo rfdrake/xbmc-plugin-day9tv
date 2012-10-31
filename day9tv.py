@@ -106,7 +106,7 @@ class Day9tv:
         # upcoming...
         results=tree.find('ul', { "id" : "results" })
         # should figure out how to do this with soup.. or not
-        titles = re.compile('<h3><a href="(/d/Day9.*?)">(.*?)</a></h3>')
+        titles = re.compile('<h3.*?><a href="(/d/Day9.*?)">(.*?)</a></h3>')
 
         for m in titles.finditer(str(results)):
             title = m.group(2)
