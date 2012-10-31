@@ -1,7 +1,7 @@
 import urllib, urllib2, re, sys, os, string, day9tv
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin
 
-__version__ = "0.0.1"
+__version__ = "0.0.5b"
 __plugin__ = "Day9tv-" + __version__
 __author__ = "Robert"
 __settings__ = xbmcaddon.Addon(id='plugin.video.day9tv')
