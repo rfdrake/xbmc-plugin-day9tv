@@ -105,14 +105,10 @@ class Day9tv:
         # could excise the existing shows and say whatever is left is
         # upcoming...
         results=tree.find('ul', { "id" : "results" })
-        # should figure out how to do this with soup.. or not
-        titles = re.compile('<h3.*?><a href="(/d/Day9.*?)">(.*?)</a></h3>')
-
-        for m in titles.finditer(str(results)):
-            title = m.group(2)
-            url = m.group(1)
-            self.addCategory(title, 'http://day9.tv/'+url, 'showGames')
-
+        for r in results.findAll('h3'):
+	     link = r.contents[0]
+	     self.addCategory(str(link.contents[0]), 'http://day9.tv/' + str(link['href']), 'showGames')
+	
         try: 
             nextpage = tree.find('li', { "class" : "next" }).find('a').get('href')
             if nextpage: 
