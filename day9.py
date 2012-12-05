@@ -6,10 +6,10 @@ from BeautifulSoup import BeautifulSoup
 
 pluginhandle=int(sys.argv[1])
 
-class Day9tv:
+class Day9:
 
     USERAGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8"
-    __settings__ = xbmcaddon.Addon(id='plugin.video.day9tv')
+    __settings__ = xbmcaddon.Addon(id='plugin.video.day9')
     __language__ = __settings__.getLocalizedString
     common = CommonFunctions
 
