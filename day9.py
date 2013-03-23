@@ -95,7 +95,7 @@ class Day9:
 
     def showTitles(self, params = {}):
         get = params.get
-        link = self.getRequest(base64.decodestring(get("url")))
+        link = self.getRequest(base64.decodestring(urllib.unquoteget("url"))))
         tree = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         # narrow down the search to get rid of upcoming shows
         # I'd like to add them just to inform people of what/when things are
@@ -118,10 +118,10 @@ class Day9:
 
     def showGames(self, params = {}):
         get = params.get
-        link = self.getRequest(base64.decodestring(get("url")))
+        link = self.getRequest(base64.decodestring(urllib.unquote(get("url"))))
         tree = BeautifulSoup(link)
 	airdate = tree.find('time')
-	title = base64.decodestring(get("title"))
+	title = base64.decodestring(urllib.unquote(get("title")))
         try: 
             description = tree.find(text='Description').findNext('p')
         except:
