@@ -131,6 +131,14 @@ class Day9:
             v=re.match('http://www.youtube.com/embed/(.*)', video.get('src'))
             i=i+1
             self.addVideo(str(title)+' Part '+str(i), youtubeid=v.group(1), description=description)
+        if i == 0:
+            # No embedded videos, try scraping links
+            for L in tree.findAll('a'):
+                m = re.match('http://www.youtube.com/watch\?v=(.*)', L.get('href', ''))
+                if m:
+                    print "Matched"
+                    vid_title = L.string if L.string is not None else 'Part %d'%i
+                    self.addVideo(str(title)+' - ' + vid_title, youtubeid=m.group(1), description=description)
 
     def showVideo(self, params = {}):
         get = params.get
