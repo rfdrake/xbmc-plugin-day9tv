@@ -95,7 +95,7 @@ class Day9:
 
     def showTitles(self, params = {}):
         get = params.get
-        link = self.getRequest(base64.decodestring(urllib.unquoteget("url"))))
+        link = self.getRequest(base64.decodestring(urllib.unquote(get("url"))))
         tree = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         # narrow down the search to get rid of upcoming shows
         # I'd like to add them just to inform people of what/when things are
