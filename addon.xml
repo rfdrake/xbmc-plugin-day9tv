@@ -18,7 +18,8 @@
     <platform>all</platform>
     <summary>Day[9].tv Archive</summary>
     <description>Casts from the awesome guy Sean "Day[9]" Plott teaching "How to be a better gamer" in Starcraft.</description>
-    <license>GNU AFFERO GENERAL PUBLIC LICENSE.  Version 3, November 2007<license>
+    <license>GNU AFFERO GENERAL PUBLIC LICENSE.  Version 3, November
+2007</license>
     <forum>http://forum.xbmc.org/showthread.php?tid=143022</forum>
     <website>https://github.com/rfdrake/xbmc-plugin-day9tv</website>
     <source>https://github.com/rfdrake/xbmc-plugin-day9tv.git</source>
